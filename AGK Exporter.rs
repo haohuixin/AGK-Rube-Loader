@@ -1,5 +1,5 @@
 // ========================================================================
-// Name: AGK Rube Exporter v1.0
+// Name: AGK Rube Exporter v1.01
 // Tags: AGKExporter
 //
 // Version: 1.0
@@ -30,7 +30,7 @@ void main()
 	print("AGK Exporter Started");
 	print("       Getting Images for AGK image loader.");
 	print("       " + GetAllImageFiles() + " images processed");
-	print("       Getting Image sprites for AGK image .");
+	print("       Getting Image sprites for AGK");
 	print("       " + GetAllImageSprites() + " image sprites processed");
 	print("       Getting Physics sprites for AGK");
 	print("       " + GetAllPhysicsSprites() + " physics sprites processed");
@@ -129,10 +129,7 @@ int GetAllPhysicsSprites()
 		int flipped = 0;
 		int renderOrder =0;
 		string colorTint ="";
-
-		// If we have an image set the position based on the image
-		// else set the position based on the body.
-		// setting the fixtures using world cords should allow for offset images 
+ 
 		if ( imageId != -1)
 		{
 			image[] bimages =  worldbodies[i].getImages();
@@ -157,9 +154,19 @@ int GetAllPhysicsSprites()
 		float friction = GetAverageFriction(bfixtures);
 		float restitution = GetAverageRestitution(bfixtures);
 		int sensor = CheckFixturesForSensor(bfixtures);
-			// Do category and groups here also.
+	
+		int categorybits = 1;
+		int maskbits = 65535;
+		int filtergroup = 0;
 
-		exportText += "3" + seperator + spriteId + seperator + imageId + seperator +  type + seperator + positionX + seperator + positionY + seperator + angle + seperator + bullet + seperator + fixedrotation + seperator + worldbodies[i].getLinearVelocity().x + seperator + worldbodies[i].getLinearVelocity().y + seperator + worldbodies[i].getAngularVelocity() + seperator + worldbodies[i].getLinearDamping() + seperator + worldbodies[i].getAngularDamping() + seperator + worldbodies[i].getMass() + seperator + worldbodies[i].getLocalCenter().x + seperator + worldbodies[i].getLocalCenter().y + seperator + sensor + seperator + friction + seperator + restitution + seperator + scale + seperator + aspect + seperator + flipped + seperator + renderOrder + seperator + colorTint + newline;
+		if(bfixtures[0].valid)
+		{
+			categorybits = bfixtures[0].getFilterCategoryBits();
+			maskbits = bfixtures[0].getFilterMaskBits();
+			filtergroup = bfixtures[0].getFilterGroupIndex();			
+		}
+
+		exportText += "3" + seperator + spriteId + seperator + imageId + seperator +  type + seperator + positionX + seperator + positionY + seperator + angle + seperator + bullet + seperator + fixedrotation + seperator + worldbodies[i].getLinearVelocity().x + seperator + worldbodies[i].getLinearVelocity().y + seperator + worldbodies[i].getAngularVelocity() + seperator + worldbodies[i].getLinearDamping() + seperator + worldbodies[i].getAngularDamping() + seperator + worldbodies[i].getMass() + seperator + worldbodies[i].getLocalCenter().x + seperator + worldbodies[i].getLocalCenter().y + seperator + sensor + seperator + friction + seperator + restitution + seperator + scale + seperator + aspect + seperator + flipped + seperator + renderOrder + seperator + colorTint + seperator + filtergroup + seperator + categorybits + seperator + maskbits + newline;
 
 		for (uint f = 0; f < bfixtures.length(); f++)
 		{		
