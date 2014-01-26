@@ -1,12 +1,12 @@
 // ========================================================================
-// Name: AGK Rube Exporter v1.02
+// Name: AGK Rube Exporter v1.03
 // Tags: AGKExporter
 //
-// Version: 1.02
+// Version: 1.03
 // Created: 22/01/2014
 // By: Stuart Tresadern
 //
-// RUBE Editor Version: 1.5.3
+// RUBE Editor Version: 1.5.4
 // AGK Version: 108 & current Alpha 2
 // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -242,32 +242,32 @@ int GetAllPhysicsJoints()
 
 		if (  bjoints[i].getType() == 1 ) // Revolute Joint
 		{
-			exportText += "6" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + rd(bjoints[i].getLowerLimit()) + seperator + rd(bjoints[i].getUpperLimit()) + seperator + BoolToInt(bjoints[i].getEnableMotor()) + seperator + BoolToInt(bjoints[i].getEnableLimit()) + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "6" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + rd(bjoints[i].getLowerLimit()) + seperator + rd(bjoints[i].getUpperLimit()) + seperator + BoolToInt(bjoints[i].getEnableMotor()) + seperator + BoolToInt(bjoints[i].getEnableLimit()) + seperator + bjoints[i].getMotorSpeed() + seperator + bjoints[i].getMaxMotorTorque() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}	
 
 		if (  bjoints[i].getType() == 2 ) // Prismatic Joint
 		{
-			exportText += "7" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + bjoints[i].getLowerLimit() + seperator + bjoints[i].getUpperLimit() + seperator + BoolToInt(bjoints[i].getEnableMotor()) + seperator + BoolToInt(bjoints[i].getEnableLimit()) + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "7" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + bjoints[i].getLowerLimit() + seperator + bjoints[i].getUpperLimit() + seperator + BoolToInt(bjoints[i].getEnableMotor()) + seperator + BoolToInt(bjoints[i].getEnableLimit()) + seperator + bjoints[i].getMotorSpeed() + seperator + bjoints[i].getMaxMotorForce() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}
 
 		if (  bjoints[i].getType() == 8 ) // Weld Joint
 		{
-			exportText += "10" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "10" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getReferenceAngle() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}
 
 		if (  bjoints[i].getType() == 3  ) // Distance Joint
 		{
-			exportText += "11" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "11" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}
 
 		if (  bjoints[i].getType() == 10  ) // Rope Joint
 		{
-			exportText += "12" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "12" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}
 
 		if (  bjoints[i].getType() == 7 ) // Wheel Joint
 		{
-			exportText += "13" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getEnableMotor() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + newline;
+			exportText += "13" + seperator +  bjoints[i].id + seperator + spriteAid + seperator +spriteBid + seperator + anchorAx + seperator + anchorAy + seperator + anchorBx + seperator + anchorBy + seperator + bjoints[i].getEnableMotor() + seperator + bjoints[i].getLocalAxis().x + seperator + bjoints[i].getLocalAxis().y + seperator + bjoints[i].getCollideConnected() + newline;
 		}
 	}
 

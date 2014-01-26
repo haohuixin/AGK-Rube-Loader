@@ -1,10 +1,10 @@
 // ========================================================================
 // AGK R.U.B.E Loader
-// Version 1.0
+// Version 1.03
 // 22/01/2014
 // Stuart Tresadern
 //
-// Requires data in the format from the AGK Rube Exporter v1.0
+// Requires data in the format from the AGK Rube Exporter v1.03
 // ------------------------------------------------------------------------
 
 
@@ -266,16 +266,16 @@ Function CreateRevoluteJoints( data$, spriteStartId )
     iSpriteBid = Val(GetStringToken(data$,"|",4)) + spriteStartId
     AnchorAx# = ValFloat(GetStringToken(data$,"|",5))
     AnchorAy# = ValFloat(GetStringToken(data$,"|",6))
-    CreateRevoluteJoint(iJointId,iSpriteAid,iSpriteBid,(AnchorAx# * drawScale#),(AnchorAy# * -drawScale#),0)
+    collide = ValFloat(GetStringToken(data$,"|",18))
 
-     // Motor and Limits
+    CreateRevoluteJoint(iJointId,iSpriteAid,iSpriteBid,(AnchorAx# * drawScale#),(AnchorAy# * -drawScale#),collide)
+
     if  Val(GetStringToken(data$,"|",13)) = 1
         SetJointLimitOn( iJointId, ValFloat(GetStringToken(data$,"|",10)) , ValFloat(GetStringToken(data$,"|",11)))
     endif
 
    if  Val(GetStringToken(data$,"|",12)) = 1
-        // R.U.B.E Does not currently output the Motor speed and torque (as of 25/01/2014)
-        SetJointMotorOn( iJointId, .5 / drawscale# , 50 * drawscale# )
+        SetJointMotorOn( iJointId, ValFloat(GetStringToken(data$,"|",14)) * -1 , ValFloat(GetStringToken(data$,"|",15)) * drawscale# )
     endif
 
 Endfunction
@@ -290,9 +290,11 @@ Function CreatePrismaticJoints( data$ , spriteStartId)
     iSpriteBid = Val(GetStringToken(data$,"|",4)) + spriteStartId
     AnchorAx# = ValFloat(GetStringToken(data$,"|",5)) * drawScale#
     AnchorAy# = ValFloat(GetStringToken(data$,"|",6)) * -drawScale#
-    Axisx# = ValFloat(GetStringToken(data$,"|",14))
-    Axisy# = ValFloat(GetStringToken(data$,"|",15))  * -1
-    CreatePrismaticJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, Axisx#, Axisy#, 0)
+    Axisx# = ValFloat(GetStringToken(data$,"|",16))
+    Axisy# = ValFloat(GetStringToken(data$,"|",17))  * -1
+    collide = ValFloat(GetStringToken(data$,"|",18))
+
+    CreatePrismaticJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, Axisx#, Axisy#, collide)
 
     // Motor and Limits
     if  Val(GetStringToken(data$,"|",13)) = 1
@@ -300,8 +302,7 @@ Function CreatePrismaticJoints( data$ , spriteStartId)
     endif
 
    if  Val(GetStringToken(data$,"|",12)) = 1
-         // R.U.B.E Does not currently output the Motor speed and torque (as of 25/01/2014)
-        SetJointMotorOn( iJointId, .5 / drawscale# , 50 * drawscale#)
+        SetJointMotorOn( iJointId, ValFloat(GetStringToken(data$,"|",14)) , ValFloat(GetStringToken(data$,"|",15)) * drawscale# )
     endif
 
 Endfunction
@@ -318,7 +319,9 @@ Function CreateDistanceJoints( data$ ,spriteStartId)
     AnchorAy# = ValFloat(GetStringToken(data$,"|",6)) * -drawScale#
     AnchorBx# = ValFloat(GetStringToken(data$,"|",7)) * drawScale#
     AnchorBy# = ValFloat(GetStringToken(data$,"|",8)) * -drawScale#
-    CreateDistanceJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, AnchorBx#, AnchorBy#, 0)
+    collide = ValFloat(GetStringToken(data$,"|",11))
+
+    CreateDistanceJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, AnchorBx#, AnchorBy#, collide)
 
 Endfunction
 
@@ -340,7 +343,9 @@ Function CreateWeldJoints( data$, spriteStartId)
     iSpriteBid = Val(GetStringToken(data$,"|",4)) + spriteStartId
     AnchorAx# = ValFloat(GetStringToken(data$,"|",5)) * drawScale#
     AnchorAy# = ValFloat(GetStringToken(data$,"|",6)) * -drawScale#
-    CreateWeldJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#,0)
+    collide = ValFloat(GetStringToken(data$,"|",12))
+
+    CreateWeldJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#,collide)
 
 Endfunction
 
@@ -366,10 +371,11 @@ Function CreateWheelJoints( data$ ,spriteStartId)
     AnchorAy# = ValFloat(GetStringToken(data$,"|",6)) * -drawScale#
     Axisx# = ValFloat(GetStringToken(data$,"|",10))
     Axisy# = ValFloat(GetStringToken(data$,"|",11)) * -1
+    collide = ValFloat(GetStringToken(data$,"|",12))
 
     CreateDistanceJoints( data$ , spriteStartId)
     iJointId = iJointId + 1000
-    CreateLineJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, Axisx#, Axisy#, 0)
+    CreateLineJoint(iJointId,iSpriteAid,iSpriteBid,AnchorAx#,AnchorAy#, Axisx#, Axisy#, collide)
 
 Endfunction
 
