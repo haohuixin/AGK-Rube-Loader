@@ -169,7 +169,7 @@ Function CreatePhysicsSprites( data$ ,spriteStartId, imageStartId)
             imageHeight# = GetImageHeight(iImageId) / drawScale#
             SetSpriteSize(iSpriteId, -1 ,drawScale#)
             SetSpriteScaleByOffset(iSpriteId,imageScale# * imageAspectScale#, imageScale# )
-            SetSpriteAngle(iSpriteId, imageAngle# * -1)
+            SetSpriteAngle(iSpriteId, imageAngle# )
             SetSpriteFlip(iSpriteId, imageHorizontalFlip, 0)
             SetSpriteColor(iSpriteId,imageTintRed,imageTintGreen,imageTintBlue,imageTintAlpha)
             SetSpriteDepth(iSpriteId, imageRenderOrder )
@@ -271,7 +271,7 @@ Function CreateRevoluteJoints( data$, spriteStartId )
     CreateRevoluteJoint(iJointId,iSpriteAid,iSpriteBid,(AnchorAx# * drawScale#),(AnchorAy# * -drawScale#),collide)
 
     if  Val(GetStringToken(data$,"|",13)) = 1
-        SetJointLimitOn( iJointId, ValFloat(GetStringToken(data$,"|",10)) , ValFloat(GetStringToken(data$,"|",11)))
+        SetJointLimitOn( iJointId, ValFloat(GetStringToken(data$,"|",10)) * -1, ValFloat(GetStringToken(data$,"|",11)) * -1)
     endif
 
    if  Val(GetStringToken(data$,"|",12)) = 1
