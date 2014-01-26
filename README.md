@@ -20,23 +20,15 @@ AGK RubeLoader.
 
 Add the RubeLoader.agc to your project.
 
-example main.agc to import and run the physics scene.
+see example main.agc to import and run the physics scene.
 
+function LoadRubeScene takes 4 parameters
 
-// Includes
-#include "RubeLoader.agc"
+LoadRubeScene( filename$ ,imageStartId, physicsSpriteStartId, imageSpriteStartId)
 
-SetVirtualResolution ( 100, 100 )
+Parameters:
+//              filename$               string  the filename and path to the rube data.
+//              imageStartId            integer value used to start the allocation of id's for images
+//              physicsSpriteStartId    integer value used to start the allocation of id's for physics sprites
+//              imageSpriteStartId      integer value used to start the allocation of id's for image sprites
 
-SetViewOffset( -50, -50 )
-Global drawScale#
-drawScale# = 5
-SetPhysicsScale(0.2)
-
-LoadRubeScene("myrubescene.txt", 1000, 1000, 1000)
-SetPhysicsGravity(0,50)
-SetPhysicsDebugOn()
-
-do
- Sync()
-loop
