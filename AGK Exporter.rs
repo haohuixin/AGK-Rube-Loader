@@ -1,8 +1,8 @@
 // ========================================================================
-// Name: AGK Rube Exporter v1.01
+// Name: AGK Rube Exporter v1.02
 // Tags: AGKExporter
 //
-// Version: 1.0
+// Version: 1.02
 // Created: 22/01/2014
 // By: Stuart Tresadern
 //
@@ -27,13 +27,18 @@ string exportText;
 // ----------------------------------------------------------------------------------------------------------------------------------
 void main() 
 {
+	array<int> imageOrder(getAllImages().length);
+
 	print("AGK Exporter Started");
 	print("       Getting Images for AGK image loader.");
-	print("       " + GetAllImageFiles() + " images processed");
+
+	imageOrder = GetAllImageFiles();
+
+	print("       " + imageOrder.length + " images processed");
 	print("       Getting Image sprites for AGK");
-	print("       " + GetAllImageSprites() + " image sprites processed");
+	print("       " + GetAllImageSprites(imageOrder) + " image sprites processed");
 	print("       Getting Physics sprites for AGK");
-	print("       " + GetAllPhysicsSprites() + " physics sprites processed");
+	print("       " + GetAllPhysicsSprites(imageOrder) + " physics sprites processed");
 	print("       Getting Joints for AGK");
 	print("       " +  GetAllPhysicsJoints() + " joints processed");
 	print("       Saving Export File : " + defaultExportPath + defaultFileName);
@@ -54,9 +59,10 @@ bool SaveExportFile()
 // Gets all the image files so that they can be pre loaded in AGK
 // ----------------------------------------------------------------------------------------------------------------------------------
 
-int GetAllImageFiles()
+int[] GetAllImageFiles()
 {
 	image[] bimage = getAllImages();
+	array<int> imageOrder(bimage.length);
 
 	for (uint i = 0; i < bimage.length(); i++)
 	{		
@@ -64,17 +70,20 @@ int GetAllImageFiles()
 		{
 			int id = bimage[i].id;		
 			exportText += "1" + seperator + id + seperator + GetFileNameFromPath(bimage[i].getFile()) + newline;			
+			imageOrder[i] = bimage[i].getRenderOrder();
 		}		
 	}
 	
-	return bimage.length();
+	imageOrder.reverse();
+
+	return imageOrder;
 }
 
 // ========================================================================
 // Gets all the image sprites for AGK (Images that are not attached to a physics body
 // ----------------------------------------------------------------------------------------------------------------------------------
 
-int  GetAllImageSprites() 
+int  GetAllImageSprites(int[] imageOrder) 
 {
 	image[] bimages = getAllImages();
 
@@ -89,7 +98,7 @@ int  GetAllImageSprites()
 			float scale = bimages[i].getScale();
 			float aspect = bimages[i].getAspectScale();
 			int flipped = BoolToInt(bimages[i].getFlip());
-			int renderOrder = bimages[i].getRenderOrder();
+			int renderOrder =  imageOrder[i];
 			string colorTint = bimages[i].getColorTint().getStr255();
 			
 			exportText += "2" + seperator + id + seperator + positionX + seperator + positionY + seperator + angle + seperator + scale + seperator + aspect + seperator + flipped + seperator + renderOrder + seperator + colorTint + newline;	
@@ -110,7 +119,7 @@ int  GetAllImageSprites()
 // 		Vertices limit in AGK are between 2 - 12 the results window will show warnings for shapes that exceed this range.
 // ----------------------------------------------------------------------------------------------------------------------------------
 
-int GetAllPhysicsSprites()
+int GetAllPhysicsSprites(int[] imageOrder)
 {
 	body[] worldbodies = getAllBodies();
 
@@ -139,7 +148,7 @@ int GetAllPhysicsSprites()
 			scale = bimages[0].getScale();
 			aspect = bimages[0].getAspectScale();
 			flipped = BoolToInt(bimages[0].getFlip());
-			renderOrder = bimages[0].getRenderOrder();
+			renderOrder = imageOrder[i];
 			colorTint = bimages[0].getColorTint().getStr255();
 		}
 		else

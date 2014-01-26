@@ -130,7 +130,7 @@ Function CreateBaseSprites(data$,spriteStartId, imageStartId, imageSpriteStartId
         SetSpriteScaleByOffset(iSpriteId,imageScale# * imageAspectScale#, imageScale# )
         SetSpriteAngle(iSpriteId, imageAngle# * -1)
         SetSpriteFlip(iSpriteId, imageHorizontalFlip, 0)
-        // SetSpriteDepth(iSpriteId, imageRenderOrder ) Order is reversed..... how to fix this !
+        SetSpriteDepth(iSpriteId, imageRenderOrder )
         SetSpriteColor(iSpriteId,imageTintRed,imageTintGreen,imageTintBlue,imageTintAlpha)
 
 Endfunction
@@ -172,6 +172,7 @@ Function CreatePhysicsSprites( data$ ,spriteStartId, imageStartId)
             SetSpriteAngle(iSpriteId, imageAngle# * -1)
             SetSpriteFlip(iSpriteId, imageHorizontalFlip, 0)
             SetSpriteColor(iSpriteId,imageTintRed,imageTintGreen,imageTintBlue,imageTintAlpha)
+            SetSpriteDepth(iSpriteId, imageRenderOrder )
         endif
 
         SetSpritePhysicsOn(iSpriteId, Val(GetStringToken(data$,"|",4)))
