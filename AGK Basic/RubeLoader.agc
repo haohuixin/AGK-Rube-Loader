@@ -1,10 +1,10 @@
 // ========================================================================
 // AGK R.U.B.E Loader
-// Version 1.03
-// 22/01/2014
+// Version 1.04
+// 28/01/2014
 // Stuart Tresadern
 //
-// Requires data in the format from the AGK Rube Exporter v1.03
+// Requires data in the format from the AGK Rube Exporter v1.04
 // ------------------------------------------------------------------------
 
 
@@ -26,6 +26,8 @@ Function LoadRubeScene( filename$ ,imageStartId, physicsSpriteStartId, imageSpri
      endif
 
     iRubefile = OpenToRead(filename$)
+
+    SetPhysicsMaxPolygonPoints(12)
 
     while FileEOF(iRubefile) = 0
 
@@ -207,25 +209,26 @@ Endfunction
 Function CreatePolygonFixtures ( data$ ,spriteStartId)
 
         iSpriteId = Val(GetStringToken(data$,"|",2)) + spriteStartId
-        dim verticesX#[Val(GetStringToken(data$,"|",4))]
-        dim verticesY#[Val(GetStringToken(data$,"|",4))]
+        vertCount = Val(GetStringToken(data$,"|",4))
+        dim verticesX#[vertCount]
+        dim verticesY#[vertCount]
 
         vcounter = 0
         verts$ = GetStringToken(data$,"|",5)
 
         vc = 0
-        for v = 0 to (Val(GetStringToken(data$,"|",4)) * 2) -1 step 2
+        for v = 0 to (vertCount * 2) -1 step 2
             verticesX#[vc] = (ValFloat(GetStringToken(verts$,",",v + 1))* drawScale#)
             verticesY#[vc] = (ValFloat(GetStringToken(verts$,",",v + 2)) * -drawScale#)
             vc = vc + 1
         next v
 
         counter = 0
-        for c = Val(GetStringToken(data$,"|",4)) -1 to 0 step -1
+        for c = 0 to vertCount -1 step 1
             if Val(GetStringToken(data$,"|",3)) = 1
-                SetSpriteShapePolygon(iSpriteId,Val(GetStringToken(data$,"|",4)),counter,verticesX#[c],verticesY#[c])
+                SetSpriteShapePolygon(iSpriteId,vertCount,counter,verticesX#[c],verticesY#[c])
             else
-                AddSpriteShapePolygon(iSpriteId,Val(GetStringToken(data$,"|",4)),counter,verticesX#[c],verticesY#[c])
+                AddSpriteShapePolygon(iSpriteId,vertCount,counter,verticesX#[c],verticesY#[c])
             endif
             inc counter
         next c

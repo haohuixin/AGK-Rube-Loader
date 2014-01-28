@@ -1,9 +1,9 @@
 // ========================================================================
-// Name: AGK Rube Exporter v1.03
+// Name: AGK Rube Exporter v1.04
 // Tags: AGKExporter
 //
-// Version: 1.03
-// Created: 22/01/2014
+// Version: 1.04
+// Created: 28/01/2014
 // By: Stuart Tresadern
 //
 // RUBE Editor Version: 1.5.4
@@ -17,7 +17,8 @@
 	
 string seperator = "|";
 string newline = "\n";
-string defaultExportPath = "C:\\Development\\TrezSoft\\AGK\\RubeLoader\\media\\";
+//string defaultExportPath = "C:\\Development\\TrezSoft\\AGK\\RubeLoader\\media\\";
+string defaultExportPath ="C:\\Development\\TrezSoft\\AGK-c++\\template_windows_vs2010\\Debug\\media\\";
 string defaultFileName = "myrubescene.txt"; 
 string pathSepartor = "/";
 string exportText;
@@ -193,6 +194,20 @@ int GetAllPhysicsSprites(int[] imageOrder)
 			}
 			else if (fixtureType == 1 || fixtureType == 2)
 			{
+
+				// Check Winding
+				if (ClockWise( bfixtures[f].getVertices()) == -1)
+				{
+					bfixtures[f].reverseWinding();
+				}
+
+				if(Convex(bfixtures[f].getVertices()) == -1)
+				{
+					print("       ** WARNING ** Body " +  worldbodies[i].id + ":" + worldbodies[i].getName() + " has possible complex fixtures (Concave).");
+ 					print("                                Fixture " + bfixtures[f].id + ":" + bfixtures[f].getName() );
+					print("                                TIP: Use the action menu to split the fixture into convex polygons." );
+				}
+
  	     		vertex[] fvertices = bfixtures[f].getVertices();
 				string vertstring  = "";
 
@@ -418,3 +433,97 @@ string GetFileNameFromPath(string fullFileName)
 	return fileName;
 }
 
+// ========================================================================
+// Check if polygon is convex : 1 = Convex -1 = Concave 0 = Incomputable
+// 					        : Only works for simple polygons (no holes no intersecting.)
+// ----------------------------------------------------------------------------------------------------------------------------------
+int Convex(vertex[] vertices)
+{
+	int i, j, k;
+   	int flag = 0;
+   	int numVertices = vertices.length;
+   	double z;
+
+   	if (numVertices < 3)
+   	{
+      	return(0);
+   	}
+
+   	for (i = 0; i < numVertices;i++) 
+   	{
+      	j = (i + 1) % numVertices;
+      	k = (i + 2) % numVertices;
+      	z  = (vertices[j].x - vertices[i].x) * (vertices[k].y - vertices[j].y);
+      	z -= (vertices[j].y - vertices[i].y) * (vertices[k].x - vertices[j].x);
+   
+	  	if(z < 0)
+     	{
+			flag |= 1;
+	  	}
+	  	else if(z > 0)
+      	{
+			flag |= 2;
+	  	}
+
+	  	if (flag == 3)
+	  	{   
+		  	return(-1); 
+	  	}
+   	}
+
+   	if (flag != 0)
+   	{
+      	return(1); 
+   	}
+   	else
+   	{
+      	return(0);
+   	}
+}
+
+// ========================================================================
+// Check for Clockwise : 1 = Clockwise -1 = Counter Clockwise 0 = Incomputable
+// 					        : Only works for simple polygons (no holes no intersecting.)
+// ----------------------------------------------------------------------------------------------------------------------------------
+int ClockWise(vertex[] vertices)
+{
+	int i, j, k;
+	int count = 0;
+	int numVertices = vertices.length;
+	double z;
+
+	if (numVertices < 3)
+   	{
+     	 return(0);
+   	}
+
+   	for (i = 0; i < numVertices; i++) 
+   	{
+      	j = (i + 1) % numVertices;
+      	k = (i + 2) % numVertices;
+      	z  = (vertices[j].x - vertices[i].x) * (vertices[k].y - vertices[j].y);
+      	z -= (vertices[j].y - vertices[i].y) * (vertices[k].x - vertices[j].x);
+
+      	if (z < 0)
+	  	{
+         		count--;
+	  	}
+      	else if (z > 0)
+      	{   
+		 	count++;
+	  	}
+   	}
+
+   	if (count > 0)
+   	{
+      	return(-1); 
+  	 }
+  	 else if (count < 0)
+   	{
+		return(1); 
+   	}
+   	else
+   	{
+      	return(0);
+   	}
+}
